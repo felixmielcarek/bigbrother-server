@@ -1,0 +1,36 @@
+name: Deploy to Google Cloud App Engine
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: "bigbrother-441019"
+
+      - name: Authenticate Docker
+        run: |
+          echo ${{ secrets.GCP_SA_KEY }} | docker login -u _json_key --password-stdin https://gcr.io
+
+      - name: Build Docker image
+        run: |
+          docker build -t gcr.io/bigbrother-441019/bigbrother-server:$GITHUB_SHA .
+          docker push gcr.io/bigbrother-441019/bigbrother-server:$GITHUB_SHA
+
+      - name: Deploy to App Engine
+        run: |
+          gcloud app deploy --image-url=gcr.io/bigbrother-441019/bigbrother-server:$GITHUB_SHA --quiet
+
+      - name: Clean up Docker images
+        run: |
+          docker image rm gcr.io/bigbrother-441019/bigbrother-server:$GITHUB_SHA
