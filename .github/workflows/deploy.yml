@@ -1,6 +1,6 @@
 name: Deploy to Google Cloud App Engine
 
-#on:
+on: push
 #  release:
 #    types: [published]
 
