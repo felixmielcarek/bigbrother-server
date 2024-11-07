@@ -1,8 +1,8 @@
 name: Deploy to Google Cloud App Engine
 
-on:
-  release:
-    types: [published]
+#on:
+#  release:
+#    types: [published]
 
 jobs:
   build-and-deploy:
