@@ -13,7 +13,7 @@ const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 const port = process.env.SERVER_PORT;
 const redirectUri = process.env.SPOTIFY_REDIRECT_URL;
 const allowedDomain = [ process.env.ALLOWED_DOMAIN ];
-const databaseUrl = process.env.DATABASE_URL;
+const dbApiUrl = process.env.DBAPI_URL;
 const frontendUrl = process.env.FRONTEND_URL;
 //#endregion
 
@@ -76,7 +76,7 @@ app.get('/callback', async (req, res) => {
   }
 
   try {
-    await axios.post(`${databaseUrl}/users`, {
+    await axios.post(`${dbApiUrl}/users`, {
       spotifyId: data.SpotifyId,
       accessToken: data.AccessToken,
       refreshToken: data.RefreshToken
@@ -86,7 +86,7 @@ app.get('/callback', async (req, res) => {
     //res.status(200).send('Ok');
     res.redirect(`${frontendUrl}`);
   } catch (error) { 
-    console.log(`Error accessing database: ${error}`);
+    console.log(`Error accessing database API: ${error}`);
     console.log(error);
     res.status(500).send('Error');
   }
