@@ -26,7 +26,6 @@ function stepBeggining(step) {
 
 //#region APP INIT
 const app = express()
-app.use(cors({ origin: allowedDomain }));
 app.use(express.json());
 app.listen(port, () => { console.log(`Big brother server is listening on port ${port}`) })
 //#endregion
